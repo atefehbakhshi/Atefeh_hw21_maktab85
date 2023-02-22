@@ -1,9 +1,10 @@
 import "./App.css";
+import FormContainer from "./components/form";
 
 function App() {
   return (
-    <div className="text-blue-200">
-      <h1>hi</h1>
+    <div className="flex flex-col pt-2">
+      <FormContainer />
     </div>
   );
 }
