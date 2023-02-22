@@ -13,11 +13,11 @@ const formSlice = createSlice({
       localStorage.setItem("contact", JSON.stringify(state.contactList));
     },
     readFromServer: (state, action) => {
-      state.contactList = action.payload;
+      state.contactList = JSON.parse(localStorage.getItem("contact")) || [];
     },
   },
 });
 
-export const { addToContact } = formSlice.actions;
+export const { addToContact, readFromServer } = formSlice.actions;
 
 export default formSlice.reducer;
