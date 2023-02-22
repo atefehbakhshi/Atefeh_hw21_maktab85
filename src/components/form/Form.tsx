@@ -1,6 +1,6 @@
 import { useDispatch } from "react-redux";
 import useInput from "../../hooks/use-input";
-import { addToContact } from "../../store/form-slice";
+import { addContact } from "../../store/form-slice";
 import {
   validFamilyName,
   validName,
@@ -84,7 +84,7 @@ const Form = () => {
       email,
     };
 
-    dispatch(addToContact(newContact));
+    dispatch(addContact(newContact));
 
     resetName();
     resetFamily();
