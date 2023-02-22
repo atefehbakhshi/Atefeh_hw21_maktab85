@@ -1,6 +1,11 @@
-import { useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import useInput from "../../hooks/use-input";
-import { addContact } from "../../store/form-slice";
+import {
+  addContact,
+  editContact,
+  removeEditingMode,
+} from "../../store/form-slice";
 import {
   validFamilyName,
   validName,
@@ -14,12 +19,16 @@ import Select from "./Select";
 
 const Form = () => {
   const dispatch = useDispatch();
-  let disabeldBtn = true;
+  const [disabeldBtn, setDisabeldBtn] = useState(true);
+  const [btnText, setBtnText] = useState("اضافه کردن");
+
+  const { editedContact, editingMode } = useSelector((state) => state.form);
 
   const {
     value: name,
     isValid: nameIsValid,
     hasError: nameHasError,
+    editedValue: editName,
     valueChangeHandler: nameChangeHandler,
     inputBlurHandler: nameBlurHandler,
     reset: resetName,
@@ -29,6 +38,7 @@ const Form = () => {
     value: family,
     isValid: familyIsValid,
     hasError: familyHasError,
+    editedValue: editFamily,
     valueChangeHandler: familyChangeHandler,
     inputBlurHandler: familyBlurHandler,
     reset: resetFamily,
@@ -38,6 +48,7 @@ const Form = () => {
     value: phone,
     isValid: phoneIsValid,
     hasError: phoneHasError,
+    editedValue: editPhone,
     valueChangeHandler: phoneChangeHandler,
     inputBlurHandler: phoneBlurHandler,
     reset: resetPhone,
@@ -47,6 +58,7 @@ const Form = () => {
     value: relation,
     isValid: relationIsValid,
     hasError: relationHasError,
+    editedValue: editRelation,
     valueChangeHandler: relationChangeHandler,
     inputBlurHandler: relationBlurHandler,
     reset: resetRelation,
@@ -56,21 +68,25 @@ const Form = () => {
     value: email,
     isValid: emailIsValid,
     hasError: emailHasError,
+    editedValue: editEmail,
     valueChangeHandler: emailChangeHandler,
     inputBlurHandler: emailBlurHandler,
     reset: resetEmail,
   } = useInput(validEmail);
 
   // check all items be valid
-  const ValidValues = nameIsValid;
-  // familyIsValid &&
-  // phoneIsValid &&
-  // relationIsValid &&
-  // emailIsValid;
+  const ValidValues =
+    nameIsValid &&
+    familyIsValid &&
+    phoneIsValid &&
+    relationIsValid &&
+    emailIsValid;
 
-  if (ValidValues) {
-    disabeldBtn = false;
-  }
+  useEffect(() => {
+    if (ValidValues) {
+      setDisabeldBtn(false);
+    }
+  }, [ValidValues]);
 
   const submitHandler = (event) => {
     event.preventDefault();
@@ -84,16 +100,38 @@ const Form = () => {
       email,
     };
 
-    dispatch(addContact(newContact));
+    if (ValidValues) {
+      if (!editingMode) {
+        dispatch(addContact(newContact));
+      } else {
+        newContact.id = editedContact.id;
+        dispatch(editContact(newContact));
+        dispatch(removeEditingMode());
+      }
 
-    resetName();
-    resetFamily();
-    resetPhone();
-    resetRelation();
-    resetEmail();
+      resetName();
+      resetFamily();
+      resetPhone();
+      resetRelation();
+      resetEmail();
 
-    console.log(newContact);
+      setDisabeldBtn(true);
+      setBtnText("اضافه کردن");
+    }
   };
+
+  // edited mode
+  useEffect(() => {
+    if (editingMode) {
+      editName(editedContact.name);
+      editFamily(editedContact.family);
+      editPhone(editedContact.phone);
+      editRelation(editedContact.relation);
+      editEmail(editedContact.email);
+      setDisabeldBtn(false);
+      setBtnText("ویرایش");
+    }
+  }, [editingMode]);
 
   return (
     <form className="flex flex-col gap-4" onSubmit={submitHandler}>
@@ -128,6 +166,7 @@ const Form = () => {
         onChange={relationChangeHandler}
         onBlur={relationBlurHandler}
         hasError={relationHasError}
+        value={relation}
       />
       <Input
         type="email"
@@ -150,7 +189,7 @@ const Form = () => {
         }
         disabled={disabeldBtn}
       >
-        اضافه کردن
+        {btnText}
       </button>
     </form>
   );

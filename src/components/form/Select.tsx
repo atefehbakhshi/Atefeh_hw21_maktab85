@@ -1,7 +1,12 @@
-const Select = ({ onChange, onBlur, hasError }) => {
+const Select = ({ onChange, onBlur, hasError, value }) => {
   return (
     <div className="flex flex-col gap-2">
-      <select className="rounded py-1 px-3" onChange={onChange} onBlur={onBlur}>
+      <select
+        className="rounded py-1 px-3"
+        onChange={onChange}
+        onBlur={onBlur}
+        value={value}
+      >
         <option className="hidden">نسبت</option>
         <option value="دوست">دوست</option>
         <option value="همکار">همکار</option>

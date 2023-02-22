@@ -1,6 +1,6 @@
 import { Icon } from "@iconify/react";
 import { useDispatch } from "react-redux";
-import { getContactId } from "../../store/form-slice";
+import { changeToEditingMode, getContactId } from "../../store/form-slice";
 import { showModal } from "../../store/modal-slice";
 
 const ContactItem = ({ contact }) => {
@@ -9,6 +9,10 @@ const ContactItem = ({ contact }) => {
   const deleteHandler = () => {
     dispatch(showModal());
     dispatch(getContactId(contact.id));
+  };
+
+  const editHandler = () => {
+    dispatch(changeToEditingMode(contact));
   };
 
   return (
@@ -25,6 +29,7 @@ const ContactItem = ({ contact }) => {
           icon="material-symbols:edit-square-outline"
           color="white"
           width="22"
+          onClick={editHandler}
         />
         <Icon
           icon="bxs:trash"
