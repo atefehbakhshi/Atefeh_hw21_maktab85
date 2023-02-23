@@ -1,14 +1,16 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import "./App.css";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { readFromServer } from "./store/form-slice";
 import Contacts from "./components/contacts";
 import FormContainer from "./components/form";
 import Modal from "./modal";
-import { readFromServer } from "./store/form-slice";
+import "./App.css";
 
 function App() {
   const dispatch = useDispatch();
-  const showModal = useSelector((state) => state.modal);
+  const { display: showModal } = useSelector((state) => state.modal);
 
   useEffect(() => {
     dispatch(readFromServer());
@@ -17,8 +19,8 @@ function App() {
   return (
     <>
       {showModal && <Modal />}
-
-      <div className="flex flex-col pt-2">
+      <ToastContainer />
+      <div className="flex flex-col pt-2 xl:max-w-7xl mx-auto">
         <FormContainer />
         <Contacts />
       </div>

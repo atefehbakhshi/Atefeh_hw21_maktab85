@@ -1,5 +1,6 @@
 body {
   min-height: 100vh;
+  position: relative;
   background-color: rgb(127, 44, 70);
   background-image: linear-gradient(
     98deg,

@@ -1,20 +1,26 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = false;
+const initialState = {
+  display: false,
+  scrollPosition: 0,
+};
 
 const modalSlice = createSlice({
   name: "modal",
   initialState,
   reducers: {
     hideModal: (state) => {
-      return false;
+      state.display = false;
     },
     showModal: (state) => {
-      return true;
+      state.display = true;
+    },
+    getScroll: (state, action) => {
+      state.scrollPosition = action.payload;
     },
   },
 });
 
-export const { hideModal, showModal } = modalSlice.actions;
+export const { hideModal, showModal, getScroll } = modalSlice.actions;
 
 export default modalSlice.reducer;

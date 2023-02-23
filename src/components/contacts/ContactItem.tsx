@@ -1,7 +1,7 @@
 import { Icon } from "@iconify/react";
 import { useDispatch } from "react-redux";
 import { changeToEditingMode, getContactId } from "../../store/form-slice";
-import { showModal } from "../../store/modal-slice";
+import { getScroll, showModal } from "../../store/modal-slice";
 
 const ContactItem = ({ contact }) => {
   const dispatch = useDispatch();
@@ -9,10 +9,16 @@ const ContactItem = ({ contact }) => {
   const deleteHandler = () => {
     dispatch(showModal());
     dispatch(getContactId(contact.id));
+    handleScroll();
   };
 
   const editHandler = () => {
     dispatch(changeToEditingMode(contact));
+  };
+
+  const handleScroll = () => {
+    const position = window.pageYOffset;
+    dispatch(getScroll(position));
   };
 
   return (

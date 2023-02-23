@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 import useInput from "../../hooks/use-input";
 import {
   addContact,
@@ -103,10 +104,12 @@ const Form = () => {
     if (ValidValues) {
       if (!editingMode) {
         dispatch(addContact(newContact));
+        toast("Contact added successfully!");
       } else {
         newContact.id = editedContact.id;
         dispatch(editContact(newContact));
         dispatch(removeEditingMode());
+        toast("Contact edited successfully!");
       }
 
       resetName();
